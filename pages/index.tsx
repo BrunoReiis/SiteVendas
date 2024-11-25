@@ -1,12 +1,12 @@
-import { siteConfig } from "@/config/site";
-import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import { NexusLogo } from "@/components/icons";
-
 import React, { useEffect, useState } from "react";
+import Image from "next/image"; // Import Image component from next/image
+
+import { slideHomeConfig } from "../config/slideHome";
 
 export default function IndexPage() {
   const [screenWidth, setScreenWidth] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0); // Estado para o slide atual
 
   useEffect(() => {
     const handleResize = () => {
@@ -23,44 +23,44 @@ export default function IndexPage() {
     }
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentSlide((prevSlide) => {
+        return (prevSlide + 1) % slideHomeConfig.Slides.length;
+      });
+    }, 5000);
+    return () => clearInterval(intervalId);
+  }, []); 
+
   const sectionClassNames = () => {
     if (screenWidth <= 800) {
       return "flex flex-col md:flex-row ml-2 mr-2 space-x-0 md:space-x-4";
     }
     if (screenWidth <= 1500) {
-      return "flex flex-col md:flex-row ml-2 mr-2 mt-16 space-x-0 md:space-x-4";
+      return "flex flex-col md:flex-row ml-2 mr-2 mt-4 space-x-0 md:space-x-4";  // Reduzir a margem superior
     } else {
-      return "flex flex-col md:flex-row ml-2 mr-2 mt-48 space-x-0 md:space-x-4";
-    }
-  };
-
-  const divNexusLogo = () => {
-    if (screenWidth <= 800) {
-      return "w-full md:w-3/5 mt-9 md:mt-0 flex justify-center items-center";
-    } else {
-      return "w-full md:w-3/5 mt-4 md:mt-0 flex justify-center items-center";
+      return "flex flex-col md:flex-row ml-2 mr-2 mt-0 space-x-0 md:space-x-4";  // Sem margem superior
     }
   };
 
   return (
     <DefaultLayout>
       <section className={`${sectionClassNames()} animate-fade-up`}>
-        <div className="w-full md:w-2/5">
-          <h1 className={title({ color: "fullviolet", size: "lg" })}>
-            {siteConfig.nameNormal}
-          </h1>
-          <p className="text-large mt-3 text-justify">
-            Bem-vindo ao nosso site, a solução completa para o gerenciamento
-            eficiente de produtos. Desenvolvemos uma plataforma intuitiva e
-            poderosa que ajuda empresas a organizarem seus estoques,
-            acompanharem vendas e otimizarem seus processos. Com nossas
-            ferramentas, você tem controle total sobre seus produtos, garantindo
-            decisões rápidas e assertivas. Explore nossas funcionalidades e
-            descubra como podemos simplificar a gestão do seu negócio!
-          </p>
-        </div>
-        <div className={divNexusLogo()}>
-          <NexusLogo size={300} />
+        <div className="w-full md:w-5/5">
+          {/* Slider Container */}
+          <div className="relative w-full h-[300px] md:h-[150px] overflow-hidden">
+            <div className="flex w-full transition-transform duration-500 ease-in-out">
+              <div className="flex-shrink-0 w-full h-full" key={slideHomeConfig.Slides[currentSlide].alt}>
+                <Image
+                  src={slideHomeConfig.Slides[currentSlide].img}
+                  alt={slideHomeConfig.Slides[currentSlide].alt}
+                  layout="fill" 
+                  objectFit="cover" 
+                  priority={true} 
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </DefaultLayout>
