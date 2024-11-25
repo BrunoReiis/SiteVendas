@@ -60,10 +60,10 @@ export default function IndexPage() {
             </div>
           </div>
           {/* Products Cards */}
-          <div>
+          <div className="w-full px-4">
             {Object.entries(cardProdConfig.categories).map(
               ([category, products]) => (
-                <div key={category} className="py-4">
+                <div key={category} className="py-2">
                   {/* Título da Categoria */}
                   <h2 className="text-2xl font-bold mb-4">
                     {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -72,8 +72,8 @@ export default function IndexPage() {
                   {/* Produtos da Categoria */}
                   {screenWidth <= 800 ? (
                     <Swiper
-                      spaceBetween={16}
-                      slidesPerView={2}
+                      spaceBetween={8}
+                      slidesPerView={3}
                       breakpoints={{
                         400: {
                           slidesPerView: 1.5,
@@ -85,9 +85,9 @@ export default function IndexPage() {
                     >
                       {products.map((item) => (
                         <SwiperSlide key={item.name}>
-                          <Card className="py-4" isPressable>
-                            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                              <p className="font-bold text-large">{item.name}</p>
+                          <Card className="py-2 w-[50px]" isPressable>
+                            <CardHeader className="pb-0 pt-1 px-3 flex-col items-start">
+                              <p className="font-bold text-base">{item.name}</p>
                               <small className="text-default-500">
                                 {new Intl.NumberFormat("pt-BR", {
                                   style: "currency",
@@ -95,13 +95,13 @@ export default function IndexPage() {
                                 }).format(item.price)}
                               </small>
                             </CardHeader>
-                            <CardBody className="overflow-visible py-2">
+                            <CardBody className="overflow-visible py-1">
                               <Image
                                 alt={`Imagem de ${item.name}`}
-                                className="select-none pointer-events-none max-h-60 object-cover rounded-xl"
+                                className="select-none pointer-events-none max-h-48 object-cover rounded-lg"
                                 src={item.img}
-                                width={250}
-                                height={300}
+                                width={200}
+                                height={240}
                               />
                             </CardBody>
                           </Card>
@@ -109,11 +109,11 @@ export default function IndexPage() {
                       ))}
                     </Swiper>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                       {products.map((item) => (
-                        <Card key={item.name} className="py-4" isPressable>
-                          <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                            <p className="font-bold text-large">{item.name}</p>
+                        <Card key={item.name} className="py-2" isPressable>
+                          <CardHeader className="pb-0 pt-1 px-3 flex-col items-start">
+                            <p className="font-bold text-base">{item.name}</p>
                             <small className="text-default-500">
                               {new Intl.NumberFormat("pt-BR", {
                                 style: "currency",
@@ -121,13 +121,13 @@ export default function IndexPage() {
                               }).format(item.price)}
                             </small>
                           </CardHeader>
-                          <CardBody className="overflow-visible py-2">
+                          <CardBody className="overflow-visible py-1">
                             <Image
                               alt={`Imagem de ${item.name}`}
-                              className="select-none pointer-events-none max-h-60 object-cover rounded-xl"
+                              className="select-none pointer-events-none max-h-48 object-cover rounded-lg"
                               src={item.img}
-                              width={250}
-                              height={300}
+                              width={200}
+                              height={240}
                             />
                           </CardBody>
                         </Card>
