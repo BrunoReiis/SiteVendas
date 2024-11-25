@@ -1,6 +1,10 @@
 import DefaultLayout from "@/layouts/default";
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 import { slideHomeConfig } from "../config/slideHome";
 import { cardProdConfig } from "../config/cardProd";
@@ -33,23 +37,12 @@ export default function IndexPage() {
     return () => clearInterval(intervalId);
   }, []);
 
-  const sectionClassNames = () => {
-    if (screenWidth <= 800) {
-      return "flex flex-col md:flex-row mt-0 ml-2 mr-2 space-x-0 md:space-x-4";
-    }
-    if (screenWidth <= 1500) {
-      return "flex flex-col md:flex-row ml-2 mr-2 mt-4 space-x-0 md:space-x-4";
-    } else {
-      return "flex flex-col md:flex-row ml-2 mr-2 mt-0 space-x-0 md:space-x-4";
-    }
-  };
-
   return (
     <DefaultLayout>
-      <section className={`${sectionClassNames()} animate-fade-up`}>
-        <div className="w-full md:w-5/5">
+      <section className="animate-fade-up">
+        <div className="w-full">
           {/* Slider Container */}
-          <div className="relative aspect-video w-full h-[1440px] md:h-[150px] overflow-hidden">
+          <div className="relative aspect-video w-full h-[80px] md:h-[150px] overflow-hidden">
             <div className="flex w-full transition-transform duration-500 ease-in-out">
               <div
                 className="flex-shrink-0 w-full h-full"
@@ -77,31 +70,70 @@ export default function IndexPage() {
                   </h2>
 
                   {/* Produtos da Categoria */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {products.map((item) => (
-                      <Card key={item.name} className="py-4" isPressable>
-                        <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                          <p className="font-bold text-large">{item.name}</p>
-                          <small className="text-default-500">
-                            {/* Formatação do preço em reais */}
-                            {new Intl.NumberFormat("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            }).format(item.price)}
-                          </small>
-                        </CardHeader>
-                        <CardBody className="overflow-visible py-2">
-                          <Image
-                            alt={`Imagem de ${item.name}`}
-                            className="select-none pointer-events-none max-h-60 object-cover rounded-xl"
-                            src={item.img}
-                            width={250}
-                            height={300}
-                          />
-                        </CardBody>
-                      </Card>
-                    ))}
-                  </div>
+                  {screenWidth <= 800 ? (
+                    <Swiper
+                      spaceBetween={16}
+                      slidesPerView={2}
+                      breakpoints={{
+                        400: {
+                          slidesPerView: 1.5,
+                        },
+                        600: {
+                          slidesPerView: 2,
+                        },
+                      }}
+                    >
+                      {products.map((item) => (
+                        <SwiperSlide key={item.name}>
+                          <Card className="py-4" isPressable>
+                            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                              <p className="font-bold text-large">{item.name}</p>
+                              <small className="text-default-500">
+                                {new Intl.NumberFormat("pt-BR", {
+                                  style: "currency",
+                                  currency: "BRL",
+                                }).format(item.price)}
+                              </small>
+                            </CardHeader>
+                            <CardBody className="overflow-visible py-2">
+                              <Image
+                                alt={`Imagem de ${item.name}`}
+                                className="select-none pointer-events-none max-h-60 object-cover rounded-xl"
+                                src={item.img}
+                                width={250}
+                                height={300}
+                              />
+                            </CardBody>
+                          </Card>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {products.map((item) => (
+                        <Card key={item.name} className="py-4" isPressable>
+                          <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                            <p className="font-bold text-large">{item.name}</p>
+                            <small className="text-default-500">
+                              {new Intl.NumberFormat("pt-BR", {
+                                style: "currency",
+                                currency: "BRL",
+                              }).format(item.price)}
+                            </small>
+                          </CardHeader>
+                          <CardBody className="overflow-visible py-2">
+                            <Image
+                              alt={`Imagem de ${item.name}`}
+                              className="select-none pointer-events-none max-h-60 object-cover rounded-xl"
+                              src={item.img}
+                              width={250}
+                              height={300}
+                            />
+                          </CardBody>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )
             )}
