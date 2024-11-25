@@ -37,9 +37,17 @@ export default function IndexPage() {
     return () => clearInterval(intervalId);
   }, []);
 
+  const sectionClassNames = () => {
+    if (screenWidth <= 800) {
+      return "flex flex-col md:flex-row mt-0 ml-2 mr-2 space-x-0 md:space-x-4";
+    }
+    if (screenWidth <= 1500) {
+      return "flex flex-col md:flex-row ml-2 mr-2 mt-4 space-x-0 md:space-x-4"; 
+    }
+  }
   return (
     <DefaultLayout>
-      <section className="animate-fade-up">
+      <section className={`${sectionClassNames()} animate-fade-up`}>
         <div className="w-full">
           {/* Slider Container */}
           <div className="relative aspect-video w-full h-[80px] md:h-[150px] overflow-hidden">
@@ -85,7 +93,7 @@ export default function IndexPage() {
                     >
                       {products.map((item) => (
                         <SwiperSlide key={item.name}>
-                          <Card className="py-2 w-[50px]" isPressable>
+                          <Card className="py-2" isPressable>
                             <CardHeader className="pb-0 pt-1 px-3 flex-col items-start">
                               <p className="font-bold text-base">{item.name}</p>
                               <small className="text-default-500">
