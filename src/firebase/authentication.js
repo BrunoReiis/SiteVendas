@@ -1,7 +1,7 @@
 import { app } from './firebase';
 
 import { signInWithEmailAndPassword, getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut} from "firebase/auth";
-import { addDoc, collection, getFirestore, query, getDocs, where} from "firebase/firestore";
+import { setDoc, doc, getFirestore, query, getDocs, where} from "firebase/firestore";
 import { useRouter } from 'next/router';
 
 const auth = getAuth(app)
@@ -21,13 +21,13 @@ const registrarComEmailESenha = async (name, email, pwd, router) => {
     try {
         const res = await createUserWithEmailAndPassword(auth, email, pwd);
         const user = res.user;
-        await addDoc(collection(db, "users"), {
+        await setDoc(doc(db, "users", user.uid), {
             uid: user.uid,
             name,
             authProvider: "local",
             email,
-            tipo: 2
-        })
+            tipo: 2,
+        });
     }catch(error){
         alert(error)
     }finally {
@@ -51,6 +51,7 @@ const logout = (router) => {
 
 export {
     auth,
+    db,
     loginComEmailESenha,
     registrarComEmailESenha,
     recuperarSenha,

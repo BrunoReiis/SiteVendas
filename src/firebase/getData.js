@@ -1,20 +1,15 @@
-import { getAuth } from "firebase/auth";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDoc, doc } from "firebase/firestore";
+import { auth, db } from "./authentication";
 
-const db = getDatabase();
-const auth = getAuth();
+export const getUserType = async () => {
+  const user = auth.currentUser;
+  const docRef = doc(db, "users", user.uid);
+  const docSnap = await getDoc(docRef);
 
-const GetUserNav = async (user) =>{
-    const q = query(collection(db, "cities"), where("capital", "==", true));
+  if (!docSnap.exists()) {
+      throw new Error("Documento não encontrado.");
+  }
 
-    const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-  // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-});
-
-}
-
-export {
-    GetUserNav
-}
+  const userData = docSnap.data();
+  return userData.tipo;
+};

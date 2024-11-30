@@ -27,8 +27,8 @@ export const siteConfig = {
       hideWhenLoggedIn: true,
     },
     {
-      label: "Login2",
-      href: "/login",
+      label: "Admin",
+      href: "/admin",
       requiresAuth: true,
       usuarioAdm: true,
     },
