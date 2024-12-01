@@ -23,14 +23,16 @@ import {
   GithubIcon,
   DiscordIcon,
   HeartFilledIcon,
-  LogOutIcon, // Assuming this is where LogOutIcon is imported from
+  LogOutIcon, 
 } from "@/components/icons";
 import { NexusLogo } from "@/components/icons";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { getUserType } from "@/src/firebase/getData";
 
 export const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userType, setUserType] = useState(0);
   const route = useRouter();
 
   const logOut = () => {
@@ -42,16 +44,21 @@ export const Navbar = () => {
       setLoggedIn(!!user);
     });
 
+    const fetchUserType = async () => {
+      const type = await getUserType()
+      setUserType(type)
+    }
+
+    fetchUserType()
+
     return () => {
       unsubscribe();
     };
   }, []);
 
   const navItems = siteConfig.navItems.filter((item) => {
-    // Excluir itens com `hideWhenLoggedIn` quando logado
     if (loggedIn && item.hideWhenLoggedIn) return false;
-  
-    // Exibir itens públicos ou protegidos com base na autenticação
+    if (item.usuarioAdm && userType !== 1) return false
     return !item.requiresAuth || (item.requiresAuth && loggedIn);
   });
 
