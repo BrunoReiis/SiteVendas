@@ -1,9 +1,8 @@
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import Admin from "../../src/hoc/Admin";
-import Table from "@/components/Table";
+import Table from "@/components/table";
 
-// O componente dashboard precisa ser tipado corretamente
 const Dashboard = () => {
   return (
     <DefaultLayout>
@@ -15,6 +14,4 @@ const Dashboard = () => {
     </DefaultLayout>
   );
 }
-
-// Aplicando o HOC Admin ao Dashboard, garantindo tipagem correta
 export default Admin(Dashboard);
