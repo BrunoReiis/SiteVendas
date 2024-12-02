@@ -4,23 +4,24 @@ import ModalInsertProducts from "./modalInsertProducts";
 
 export default function Table() {
   return (
-    <div className="flex flex-wrap gap-4">
-      <Tabs variant="underlined" aria-label="Tabs variants">
+    <div className="w-full">  {/* Garantindo que o contêiner ocupe 100% da largura */}
+      <Tabs variant="underlined" aria-label="Tabs variants" size="lg">
         <Tab key="products" title="Products">
-          <Card>
+          <Card className="w-full max-w-none"> {/* Usando w-full para ocupar toda a largura disponível e max-w-none para remover qualquer limite */}
             <CardBody>
+              {/* Adicione seu conteúdo aqui */}
             </CardBody>
           </Card>
         </Tab>
         <Tab key="users" title="Users">
-          <Card>
+          <Card className="w-full max-w-none"> {/* Usando w-full para ocupar toda a largura disponível e max-w-none para remover qualquer limite */}
             <CardBody>
               <ModalUsers />
             </CardBody>
           </Card>
         </Tab>
         <Tab key="videos" title="Videos">
-          {/* You can add your videos content here */}
+          {/* Adicione seu conteúdo de vídeos aqui */}
         </Tab>
       </Tabs>
     </div>

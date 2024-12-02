@@ -10,6 +10,7 @@ import {
   Chip,
   Tooltip,
 } from "@nextui-org/react";
+import { Avatar } from "@nextui-org/react";
 import { EditIcon, DeleteIcon, EyeIcon } from "./icons";
 import { getDataModalUsers } from "@/src/firebase/getData";
 
@@ -69,7 +70,12 @@ export default function ModalUsers() {
     switch (columnKey) {
       case "name":
         return (
-          <User avatarProps={{ radius: "lg", src: user.avatar }} description={user.email} name={cellValue}>
+          <User avatarProps={{ radius: "lg", src: user.avatar,  style: {
+            width: '80px', 
+            height: '80px',
+            objectFit: 'cover',
+            borderRadius: "50%",
+          } }} description={user.email} name={cellValue}>
             {user.email}
           </User>
         );
@@ -116,7 +122,8 @@ export default function ModalUsers() {
   }
 
   return (
-    <Table aria-label="Example table with custom cells">
+    <div className="w-full">
+        <Table aria-label="">
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
@@ -132,5 +139,6 @@ export default function ModalUsers() {
         )}
       </TableBody>
     </Table>
+    </div>
   );
 }
