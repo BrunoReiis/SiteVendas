@@ -27,6 +27,8 @@ const registrarComEmailESenha = async (name, email, pwd, router) => {
             authProvider: "local",
             email,
             tipo: 2,
+            role: "member",
+            status: "active",
         });
     }catch(error){
         alert(error)

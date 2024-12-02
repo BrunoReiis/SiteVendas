@@ -1,14 +1,14 @@
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import withAuth from "../../src/hoc/withAuth";
-import { getUserType } from "@/src/firebase/getData";
+import { getDataModalUsers } from "@/src/firebase/getData";
 import { useState } from "react";
 
 function Dashboard() {
   const [value, setValue] = useState("");
 
   function batata() {
-    getUserType().then((tipo: any) => {
+    getDataModalUsers().then((tipo: any) => {
       console.log("Retorno de getUserType:", tipo);
     });
     
