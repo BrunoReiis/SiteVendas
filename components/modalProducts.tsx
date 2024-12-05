@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Table,
   TableHeader,
@@ -9,55 +9,85 @@ import {
   User,
   Chip,
   Tooltip,
-  getKeyValue,
 } from "@nextui-org/react";
-import { EditIcon } from "./icons";
-import { DeleteIcon } from "./icons";
-import { EyeIcon } from "./icons";
-import { getDataModalProcuts } from "@/src/firebase/getData";
+import { EditIcon, DeleteIcon, EyeIcon } from "./icons";
+import { getDataModalProducts } from "@/src/firebase/getData";
 
-const statusColorMap = {
+type UserStatus = "active" | "paused" | "vacation";
+
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  role: string;
+  team: string;
+  status: UserStatus;
+}
+
+const statusColorMap: Record<UserStatus, "success" | "danger" | "warning"> = {
   active: "success",
   paused: "danger",
   vacation: "warning",
 };
 
-export default async function modalProducts() {
-  const data = getDataModalProcuts();
-  const columns = data.columns;
-  const users = data.users;
-  console.log(data)
-  const renderCell = React.useCallback((user: any, columnKey: any) => {
-    const cellValue = user[columnKey];
+const columns = [
+  { name: "NAME", uid: "name" },
+  { name: "ROLE", uid: "role" },
+  { name: "STATUS", uid: "status" },
+  { name: "ACTIONS", uid: "actions" },
+];
+
+export default function modalProdcuts() {
+  const [product, setProduct] = useState<UserData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const fetchedProducts = await getDataModalProducts();
+        if (typeof fetchedProducts === "string") {
+          console.error(fetchedProducts); 
+          setProduct([]); 
+        } else {
+          setProduct(fetchedProducts); 
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setProduct([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
+
+  const renderCell = useCallback((product: UserData, columnKey: string) => {
+    const cellValue = product[columnKey as keyof UserData];
 
     switch (columnKey) {
       case "name":
         return (
-          <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
+          <User avatarProps={{ radius: "lg", src: product.avatar,  style: {
+            width: '80px', 
+            height: '80px',
+            objectFit: 'cover',
+            borderRadius: "50%",
+          } }} description={product.email} name={cellValue}>
+            {product.email}
           </User>
         );
       case "role":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize">{cellValue}</p>
-            <p className="text-bold text-sm capitalize text-default-400">
-              {user.team}
-            </p>
+            <p className="text-bold text-sm capitalize text-default-400">{product.team}</p>
           </div>
         );
       case "status":
         return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
+          <Chip className="capitalize" color={statusColorMap[product.status]} size="sm" variant="flat">
             {cellValue}
           </Chip>
         );
@@ -86,27 +116,28 @@ export default async function modalProducts() {
     }
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <Table aria-label="Example table with custom cells">
+    <div className="w-full">
+        <Table aria-label="">
       <TableHeader columns={columns}>
         {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-          >
+          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users}>
+      <TableBody items={product}>
         {(item) => (
           <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
+            {(columnKey: any) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
       </TableBody>
     </Table>
+    </div>
   );
 }

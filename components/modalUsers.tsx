@@ -10,7 +10,6 @@ import {
   Chip,
   Tooltip,
 } from "@nextui-org/react";
-import { Avatar } from "@nextui-org/react";
 import { EditIcon, DeleteIcon, EyeIcon } from "./icons";
 import { getDataModalUsers } from "@/src/firebase/getData";
 

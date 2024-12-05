@@ -1,4 +1,3 @@
-import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import Admin from "../../src/hoc/Admin";
 import Table from "@/components/table";

@@ -28,6 +28,7 @@ const registrarComEmailESenha = async (name, email, pwd, router) => {
             email,
             tipo: 2,
             role: "member",
+            team: "client",
             status: "active",
         });
     }catch(error){

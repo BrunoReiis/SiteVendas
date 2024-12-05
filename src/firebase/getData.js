@@ -24,16 +24,19 @@ export const getUserType = async () => {
   }
 };
 
-export const getDataModalProcuts = async () => {
+export const getDataModalProducts = async () => {
   try {
-    const docRef = doc(db, "products");
-    const docSnap = await getDoc(docRef);
+    const querySnapshot = await getDocs(collection(db, "products"));
 
-    if (!docSnap.exists()) {
-      return "Não foi possivel encontrar um produto";
+    if (querySnapshot.empty) {
+      return "Não foi possível encontrar produtos";
     }
 
-    const data = docSnap.data();
+    const data = [];
+    querySnapshot.forEach((doc) => {
+      data.push({ id: doc.id, ...doc.data() });
+    });
+
     return data;
   } catch (error) {
     throw new Error("Erro ao buscar dados de produtos");
