@@ -10,8 +10,8 @@ import {
   Chip,
   Tooltip,
 } from "@nextui-org/react";
-import { EditIcon, DeleteIcon, EyeIcon } from "./icons";
-import { getDataModalProducts } from "@/src/firebase/getData";
+import { EditIcon, DeleteIcon, EyeIcon } from "@/components/icons";
+import { getDataModalUsers } from "@/src/firebase/getData";
 
 type UserStatus = "active" | "paused" | "vacation";
 
@@ -38,56 +38,56 @@ const columns = [
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export default function modalProdcuts() {
-  const [product, setProduct] = useState<UserData[]>([]);
+export default function ModalUsers() {
+  const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchUsers() {
       try {
-        const fetchedProducts = await getDataModalProducts();
-        if (typeof fetchedProducts === "string") {
-          console.error(fetchedProducts); 
-          setProduct([]); 
+        const fetchedUsers = await getDataModalUsers();
+        if (typeof fetchedUsers === "string") {
+          console.error(fetchedUsers); 
+          setUsers([]); 
         } else {
-          setProduct(fetchedProducts); 
+          setUsers(fetchedUsers); 
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
-        setProduct([]);
+        console.error("Error fetching users:", error);
+        setUsers([]);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchProducts();
+    fetchUsers();
   }, []);
 
-  const renderCell = useCallback((product: UserData, columnKey: string) => {
-    const cellValue = product[columnKey as keyof UserData];
+  const renderCell = useCallback((user: UserData, columnKey: string) => {
+    const cellValue = user[columnKey as keyof UserData];
 
     switch (columnKey) {
       case "name":
         return (
-          <User avatarProps={{ radius: "lg", src: product.avatar,  style: {
+          <User avatarProps={{ radius: "lg", src: user.avatar,  style: {
             width: '80px', 
             height: '80px',
             objectFit: 'cover',
             borderRadius: "50%",
-          } }} description={product.email} name={cellValue}>
-            {product.email}
+          } }} description={user.email} name={cellValue}>
+            {user.email}
           </User>
         );
       case "role":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize">{cellValue}</p>
-            <p className="text-bold text-sm capitalize text-default-400">{product.team}</p>
+            <p className="text-bold text-sm capitalize text-default-400">{user.team}</p>
           </div>
         );
       case "status":
         return (
-          <Chip className="capitalize" color={statusColorMap[product.status]} size="sm" variant="flat">
+          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
             {cellValue}
           </Chip>
         );
@@ -130,7 +130,7 @@ export default function modalProdcuts() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={product}>
+      <TableBody items={users}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey: any) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

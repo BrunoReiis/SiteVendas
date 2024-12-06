@@ -10,18 +10,16 @@ import {
   Chip,
   Tooltip,
 } from "@nextui-org/react";
-import { EditIcon, DeleteIcon, EyeIcon } from "./icons";
-import { getDataModalUsers } from "@/src/firebase/getData";
+import { EditIcon, DeleteIcon, EyeIcon } from "../icons";
+import { getDataModalProducts } from "@/src/firebase/getData";
 
 type UserStatus = "active" | "paused" | "vacation";
 
 interface UserData {
   id: string;
   name: string;
-  email: string;
-  avatar: string;
+  link: string;
   role: string;
-  team: string;
   status: UserStatus;
 }
 
@@ -33,61 +31,60 @@ const statusColorMap: Record<UserStatus, "success" | "danger" | "warning"> = {
 
 const columns = [
   { name: "NAME", uid: "name" },
-  { name: "ROLE", uid: "role" },
+  { name: "CATEGORY", uid: "category" },
   { name: "STATUS", uid: "status" },
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export default function ModalUsers() {
-  const [users, setUsers] = useState<UserData[]>([]);
+export default function modalProdcuts() {
+  const [product, setProduct] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchUsers() {
+    async function fetchProducts() {
       try {
-        const fetchedUsers = await getDataModalUsers();
-        if (typeof fetchedUsers === "string") {
-          console.error(fetchedUsers); 
-          setUsers([]); 
+        const fetchedProducts = await getDataModalProducts();
+        if (typeof fetchedProducts === "string") {
+          console.error(fetchedProducts); 
+          setProduct([]); 
         } else {
-          setUsers(fetchedUsers); 
+          setProduct(fetchedProducts); 
         }
       } catch (error) {
-        console.error("Error fetching users:", error);
-        setUsers([]);
+        console.error("Error fetching products:", error);
+        setProduct([]);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchUsers();
+    fetchProducts();
   }, []);
 
-  const renderCell = useCallback((user: UserData, columnKey: string) => {
-    const cellValue = user[columnKey as keyof UserData];
+  const renderCell = useCallback((product: UserData, columnKey: string) => {
+    const cellValue = product[columnKey as keyof UserData];
 
     switch (columnKey) {
       case "name":
         return (
-          <User avatarProps={{ radius: "lg", src: user.avatar,  style: {
+          <User avatarProps={{ radius: "lg", src: product.link,  style: {
             width: '80px', 
             height: '80px',
             objectFit: 'cover',
             borderRadius: "50%",
-          } }} description={user.email} name={cellValue}>
-            {user.email}
+          } }} description={product.link} name={cellValue}>
+            {product.link}
           </User>
         );
       case "role":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize">{cellValue}</p>
-            <p className="text-bold text-sm capitalize text-default-400">{user.team}</p>
           </div>
         );
       case "status":
         return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
+          <Chip className="capitalize" color={statusColorMap[product.status]} size="sm" variant="flat">
             {cellValue}
           </Chip>
         );
@@ -99,12 +96,12 @@ export default function ModalUsers() {
                 <EyeIcon />
               </span>
             </Tooltip>
-            <Tooltip content="Edit user">
+            <Tooltip content="Edit product">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete user">
+            <Tooltip color="danger" content="Delete product">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </span>
@@ -130,7 +127,7 @@ export default function ModalUsers() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users}>
+      <TableBody items={product}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey: any) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

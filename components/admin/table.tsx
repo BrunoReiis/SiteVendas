@@ -2,6 +2,8 @@ import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import ModalUsers from "./modalUsers";
 import ModalProducts from "./modalProducts";
 import ModalInsertProducts from "./modalInsertProducts";
+import ModalInsertCategories from "./modalInsertCategories";
+import ModalCategories from "./modalCategories"
 
 export default function Table() {
   return (
@@ -22,7 +24,13 @@ export default function Table() {
             </CardBody>
           </Card>
         </Tab>
-        <Tab key="videos" title="Videos">
+        <Tab key="categories" title="Categories">
+        <Card className="w-full max-w-none">
+            <CardBody>
+              <ModalInsertCategories />
+              <ModalCategories />
+            </CardBody>
+          </Card>
         </Tab>
       </Tabs>
     </div>

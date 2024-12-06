@@ -15,7 +15,7 @@ export default function ModalInsertProducts() {
     sendProduct(nomeprod, categ, link, valor)
   };
 
-  const handleCriarProduto = () => {
+  const handleCreateProduct = () => {
     Enviar(nomeProduto, selectedCategory, linkProduto, valorProduto);
     onClose();
   };
@@ -63,7 +63,7 @@ export default function ModalInsertProducts() {
               <Button color="danger" variant="flat" onPress={onClose}>
                 Fechar Modal
               </Button>
-              <Button color="primary" onPress={handleCriarProduto}>
+              <Button color="primary" onPress={handleCreateProduct}>
                 Criar Produto
               </Button>
             </ModalFooter>

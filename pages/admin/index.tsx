@@ -1,6 +1,6 @@
 import DefaultLayout from "@/layouts/default";
 import Admin from "../../src/hoc/Admin";
-import Table from "@/components/table";
+import Table from "@/components/admin/table";
 
 const Dashboard = () => {
   return (
