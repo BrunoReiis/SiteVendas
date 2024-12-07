@@ -12,7 +12,9 @@ import { auth, db } from "./authentication";
 
 export const sendProduct = async (nome, categ, link, valor) => {
   try {
-    const docRef = await addDoc(collection(db, "products", categ, "items"), {
+    const category = categ;
+    console.log(category)
+    const docRef = await addDoc(collection(doc(db, "products", category), "items"), {
       name: nome,
       category: categ,
       link: link,
@@ -21,7 +23,7 @@ export const sendProduct = async (nome, categ, link, valor) => {
     });
     console.log("Produto adicionado com ID: ", docRef.id);
   } catch (error) {
-    console.log(error);
+    console.error("Erro ao adicionar produto:", error);
   }
 };
 

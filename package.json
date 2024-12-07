@@ -10,7 +10,7 @@
 	},
 	"dependencies": {
 		"@nextui-org/pagination": "^2.0.31",
-		"@nextui-org/react": "^2.4.0",
+		"@nextui-org/react": "^2.6.3",
 		"@nextui-org/system": "^2.2.0",
 		"@nextui-org/theme": "^2.2.4",
 		"@nextui-org/use-aria-link": "^2.0.16",

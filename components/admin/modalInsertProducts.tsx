@@ -1,7 +1,16 @@
 import { useState } from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, useDisclosure } from "@nextui-org/react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Input,
+  useDisclosure,
+} from "@nextui-org/react";
 import CategorySelector from "./categorySelector";
-import { sendProduct } from "@/src/firebase/sendData"
+import { sendProduct } from "@/src/firebase/sendData";
 
 export default function ModalInsertProducts() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -11,13 +20,37 @@ export default function ModalInsertProducts() {
   const [valorProduto, setValorProduto] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const Enviar = (nomeprod: string, categ: string | null, link: string, valor: string) => {
-    sendProduct(nomeprod, categ, link, valor)
+  const Enviar = async (nomeprod: string, categ: string | null, link: string, valor: number) => {
+    if (!nomeprod || !categ || !link || isNaN(valor)) {
+      console.error("Preencha todos os campos corretamente.");
+      return;
+    }
+    try {
+      await sendProduct(nomeprod, categ, link, valor);
+      console.log("Produto enviado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao enviar produto:", error);
+    }
   };
 
   const handleCreateProduct = () => {
-    Enviar(nomeProduto, selectedCategory, linkProduto, valorProduto);
+    if (!nomeProduto || !selectedCategory || !linkProduto || !valorProduto) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    const valorNumerico = parseFloat(valorProduto);
+    if (isNaN(valorNumerico)) {
+      alert("Por favor, insira um valor numérico válido para o preço.");
+      return;
+    }
+
+    Enviar(nomeProduto, selectedCategory, linkProduto, valorNumerico);
     onClose();
+    setNomeProduto(""); 
+    setLinkProduto("");
+    setValorProduto("");
+    setSelectedCategory(null);
   };
 
   return (
@@ -42,7 +75,7 @@ export default function ModalInsertProducts() {
               />
               <CategorySelector
                 selectedCategory={selectedCategory}
-                onCategoryChange={setSelectedCategory}
+                onCategoryChange={(category: any) => setSelectedCategory(category?.id || null)}
               />
               <Input
                 label="Foto do Produto"
@@ -55,6 +88,7 @@ export default function ModalInsertProducts() {
                 label="Preço do produto"
                 placeholder="Coloque o valor"
                 variant="bordered"
+                type="number"
                 value={valorProduto}
                 onChange={(e) => setValorProduto(e.target.value)}
               />
