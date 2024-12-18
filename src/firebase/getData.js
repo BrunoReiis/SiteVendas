@@ -78,9 +78,9 @@ export const getDataModelCategories = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, "products"));
 
-    const data = []; 
+    const data = [];
     querySnapshot.forEach((doc) => {
-      data.push({ id: doc.id, ...doc.data() }); 
+      data.push({ id: doc.id, ...doc.data() });
     });
 
     return data;
@@ -89,4 +89,3 @@ export const getDataModelCategories = async () => {
     throw new Error("Erro ao buscar dados de categorias");
   }
 };
-
